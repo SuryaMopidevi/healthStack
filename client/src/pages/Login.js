@@ -38,6 +38,7 @@ const Login = () => {
     if ((await checkUser(user)) === false) {
       navigate("/register");
     } else {
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
       navigate("/main");
     }
 

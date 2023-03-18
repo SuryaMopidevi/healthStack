@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Product from "./Product";
 import axios from "axios";
-import { hostURL } from "../URL";
+import { healthcareProductsRoute } from "../utils/APIRoutes";
 
 const HomeHealthcare = () => {
   const [popularProducts, setPopularProducts] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/products?type=healthcare&_limit=4`)
+      .get(healthcareProductsRoute)
       .then((res) => {
-        setPopularProducts(res.data);
+        setPopularProducts(res.data.slice(0,4));
       })
       .catch((err) => {
         console.log(err);

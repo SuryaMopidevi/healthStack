@@ -9,7 +9,7 @@ import { ThemeContext } from "../App";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { hostURL } from "../URL";
+import { productRoute } from "../utils/APIRoutes"; 
 
 const ProductPage = () => {
   const { cart, setCart, totalCount, total, setTotal, setTotalCount } =
@@ -21,10 +21,9 @@ const ProductPage = () => {
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/products/${id}`)
+      .get(`${productRoute}/${id}`)
       .then((res) => {
         setProduct(res.data);
-        console.log(product);
       })
       .catch((err) => {
         console.log(err);

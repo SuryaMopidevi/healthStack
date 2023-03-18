@@ -6,6 +6,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import { ThemeContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 
 const Product = ({ item }) => {
@@ -56,8 +57,8 @@ const Product = ({ item }) => {
     }
   };
 
-  const searchHandler = () => {
-    navigate(`/products/${item.id}`);
+  const searchHandler = async () => {
+    navigate(`/products/${item._id}`);
   };
 
   return (

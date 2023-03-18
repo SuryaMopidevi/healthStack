@@ -18,6 +18,7 @@ const Register = () => {
     phone: "",
     address: "",
   });
+  const USER_KEY = "current user";
 
   const validateForm = () => {
     const { username, password, confirmPassword, phone, pincode } = user;
@@ -66,6 +67,7 @@ const Register = () => {
         })
         
         if(res.data.status){
+          localStorage.setItem(USER_KEY, JSON.stringify({username:user.username, email:user.email, password: user.password}));
           setUser({
             firstname: "",
             lastname: "",
@@ -104,6 +106,7 @@ const Register = () => {
         })
         
         if(res.data.status){
+          localStorage.setItem(USER_KEY, JSON.stringify({username:user.username, email:user.email, password: user.password}));
           setUser({
             firstname: "",
             lastname: "",

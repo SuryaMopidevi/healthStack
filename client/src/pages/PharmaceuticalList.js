@@ -7,17 +7,19 @@ import Newsletter from "../components/Newsletter";
 import Pharmaceutical from "../components/Pharmaceutical";
 import axios from "axios";
 import SearchIcon from "@mui/icons-material/Search";
-import { hostURL } from "../URL";
+import { pharmaceuticalProductsRoute } from "../utils/APIRoutes";
 
 const PharmaceuticalList = () => {
   const [popularProducts, setPopularProducts] = useState([]);
+  const [originalProducts, setOriginalProducts] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/products?type=pharmaceutical`)
+      .get(pharmaceuticalProductsRoute)
       .then((res) => {
         setPopularProducts(res.data);
+        setOriginalProducts(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -56,7 +58,7 @@ const PharmaceuticalList = () => {
     });
     setPopularProducts(temp);
     if (e.target.value === "") {
-      window.location.reload();
+      setPopularProducts(originalProducts);    
     }
   };
 
