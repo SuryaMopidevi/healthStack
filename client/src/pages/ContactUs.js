@@ -6,7 +6,7 @@ import Announcement from "../components/Announcement";
 import contact from "../images/contactus.gif";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import { hostURL } from "../URL";
+import { queryRoute } from "../utils/APIRoutes";
 
 const ContactUs = () => {
   const navigate = useNavigate();
@@ -21,20 +21,33 @@ const ContactUs = () => {
   const sendQueryHandler = (e) => {
     e.preventDefault();
     if (localStorage.getItem(USER_KEY) === null) {
+      alert('Please Login');
       navigate("/login");
+      return;
     }
     axios
-      .post(`${hostURL}/queries`, {
+      .post(queryRoute, {
         name: query.name,
         email: query.email,
         ques: query.ques,
         sug: query.sug,
       })
-      .then(() => {
-        alert("Your query has been sent successfully");
+      .then((res) => {
+        if(res.data.status){
+          console.log("1")
+          alert("Your query sent successfully");
+          return;
+        }
+        else{
+          console.log("2")
+          alert("Please enter your query evidently");
+          return;
+        }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log("3")
         alert("Please enter your query evidently");
+        return;
       });
     setQuery({
       name: "",

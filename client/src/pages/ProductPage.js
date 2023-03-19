@@ -10,6 +10,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { productRoute } from "../utils/APIRoutes"; 
+import { addProductToCartRoute } from "../utils/APIRoutes";
 
 const ProductPage = () => {
   const { cart, setCart, totalCount, total, setTotal, setTotalCount } =

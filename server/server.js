@@ -6,6 +6,8 @@ require('dotenv').config()
 // routers
 const authRoutes = require('./routes/auth')
 const productRoutes = require('./routes/product')
+const serviceRoutes = require('./routes/service')
+const userRoutes = require('./routes/user')
 
 const app = express()
 
@@ -30,6 +32,8 @@ mongoose.connect(process.env.MONGO_URL, {
 // routes
 app.use("/api/auth",authRoutes)
 app.use("/api/products",productRoutes)
+app.use("/api/services",serviceRoutes)
+app.use("/api/users", userRoutes)
 
 
 

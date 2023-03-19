@@ -6,26 +6,40 @@ import Announcement from "../components/Announcement";
 import profileImg from "../images/profile.gif";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { hostURL } from "../URL";
+import { updateProfileRoute } from "../utils/APIRoutes";
 
 const Profile = () => {
   const USER_KEY = "current user";
   const [profile, setProfile] = useState(
     JSON.parse(localStorage.getItem(USER_KEY))
   );
+  const [actualName, setActualName] = useState(JSON.parse(localStorage.getItem(USER_KEY)).username);
   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    localStorage.setItem(USER_KEY, JSON.stringify(profile));
     axios
-      .patch(`${hostURL}/users/${profile.id}`, profile)
-      .then(() => {
-        alert("Your Profile has been updated successfully");
-        window.location.reload();
+      .post(updateProfileRoute, {
+        username : profile.username,
+        email : profile.email,
+        password : profile.password,
+        actualName : actualName
+      })
+      .then((res) => {
+        if(res.data.status) {
+          localStorage.setItem(USER_KEY, JSON.stringify(profile));
+          alert(res.data.msg);
+          window.location.reload();
+          return;
+        }
+        else{
+          alert(res.data.msg);
+          return;
+        }
       })
       .catch(() => {
-        alert("Something went wrong.Please try again.");
+        alert("Something went wrong. Please try again.");
+        return;
       });
     navigate("/profile");
   };
@@ -88,24 +102,6 @@ const Profile = () => {
                 value={profile.password}
                 onChange={(e) => {
                   setProfile({ ...profile, password: e.target.value });
-                }}
-                required
-              />
-              <small id="emailHelp" class="form-text text-muted">
-                We'll never share this information with anyone else.
-              </small>
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Re-Type Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="exampleInputPassword1"
-                placeholder="Confirm Password"
-                minlength="5"
-                value={profile.confirmPassword}
-                onChange={(e) => {
-                  setProfile({ ...profile, confirmPassword: e.target.value });
                 }}
                 required
               />

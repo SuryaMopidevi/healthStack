@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import Home from "./pages/Home";
 import MedicineList from "./pages/MedicineList";
 import HealthcareList from "./pages/HealthcareList";
@@ -15,6 +15,8 @@ import AddProduct from "./pages/AddProduct";
 import Profile from "./pages/Profile";
 import FAQ from "./pages/FAQ";
 import PageNotFound from "./pages/404";
+import axios from "axios";
+import { cartRoute } from "./utils/APIRoutes";
 
 export const ThemeContext = createContext();
 
@@ -22,6 +24,7 @@ function App() {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
+
 
   return (
     <div className="App">

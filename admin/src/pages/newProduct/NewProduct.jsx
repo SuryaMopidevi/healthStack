@@ -3,7 +3,7 @@ import "./newProduct.css";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import axios from "axios";
-import { hostURL } from "../../URL";
+import { addProductRoute } from "../../utils/APIRoutes";
 
 export default function NewProduct() {
   const [product, setProduct] = useState({
@@ -17,9 +17,15 @@ export default function NewProduct() {
     e.preventDefault();
     console.log(product);
     axios
-      .post(`${hostURL}/products`, { ...product, status: "active" })
+      .post(addProductRoute, { ...product, status: "active" })
       .then((res) => {
-        console.log(res);
+         console.log(res)
+         if(res.data.status){
+            alert("Product added successfully")
+         }
+         else{
+            alert("Product already exists")
+         }
       })
       .catch((err) => {
         console.log(err);

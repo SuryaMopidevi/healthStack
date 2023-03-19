@@ -4,8 +4,6 @@ import Product from "./Product";
 import axios from "axios";
 
 const Medicines = ({popularProducts}) => {
-
-
   return (
     <Container>
       {popularProducts.map((item) => {

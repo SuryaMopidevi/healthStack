@@ -1,4 +1,5 @@
 const Product = require('../models/productModel')
+const User = require('../models/userModel')
 
 module.exports.medicines = async (req,res,next) => {
     try {
@@ -38,4 +39,37 @@ module.exports.product = async (req,res,next) => {
     catch(err) {
         next(err)
     }
+}
+
+module.exports.newProduct = async (req,res,next) => {
+    try {
+        const { productname, img, type, price, status } = req.body;
+        const productCheck = await Product.findOne({ productname })
+        if(!productCheck){ 
+            const product = new Product({productname, img, type, price, status});
+            await product.save();
+            return res.json({status : true})
+        }
+        else{
+            return res.json({status : false})
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+}
+
+module.exports.allProducts = async(req,res,next) => {
+    try{
+        const products = await Product.find({})
+        const productArray = []
+        for(let i=0; i<products.length; i++){
+            productArray.push({...products[i], id : i + 1})
+        }
+        console.log(productArray)
+        return res.json(productArray)
+    }
+    catch(err){
+       next(err);
+   }
 }

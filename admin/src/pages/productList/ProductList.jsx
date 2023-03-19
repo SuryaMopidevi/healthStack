@@ -7,33 +7,36 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { hostURL } from "../../URL";
+import { allProductsRoute } from "../../utils/APIRoutes";
 
 export default function ProductList() {
-  const [data, setData] = useState(productRows);
+  const [data, setData] = useState([]);
+
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/products`)
+      .get(allProductsRoute)
       .then((res) => {
         setData(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+      console.log(data)
   }, []);
 
-  const handleDelete = (id) => {
-    axios
-      .delete(`${hostURL}/products/` + id)
-      .then((res) => {
-        console.log(res);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+
+  // const handleDelete = (id) => {
+  //   axios
+  //     .delete(`${hostURL}/products/` + id)
+  //     .then((res) => {
+  //       console.log(res);
+  //       window.location.reload();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
@@ -44,22 +47,47 @@ export default function ProductList() {
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            <img className="productListImg" src={params.row.img} alt="" />
-            {params.row.productname}
+            <img className="productListImg" src={params.row._doc.img} alt="" />
+            {params.row._doc.productname}
           </div>
         );
       },
     },
-    { field: "type", headerName: "Product Type", width: 200 },
+    { 
+      field: "type", 
+      headerName: "Product Type", 
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div className="productListItem">
+            {params.row._doc.type}
+          </div>
+        );
+      },
+    },
     {
       field: "status",
       headerName: "Status",
       width: 120,
+      renderCell: (params) => {
+        return (
+          <div className="productListItem">
+            {params.row._doc.status}
+          </div>
+        );
+      },
     },
     {
       field: "price",
       headerName: "Price(in Rs.)",
       width: 160,
+      renderCell: (params) => {
+        return (
+          <div className="productListItem">
+            {params.row._doc.price}
+          </div>
+        );
+      },
     },
     {
       field: "action",
@@ -68,13 +96,13 @@ export default function ProductList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/product/" + params.row.id}>
+            <Link to={"/product/" + params.row._id}>
               <button className="productListEdit">See Info</button>
             </Link>
-            <DeleteOutline
+            {/* <DeleteOutline
               className="productListDelete"
               onClick={() => handleDelete(params.row.id)}
-            />
+            /> */}
           </>
         );
       },
