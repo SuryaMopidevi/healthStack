@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Admin = require('../models/adminLoginModel')
 const bcrypt = require('bcrypt');
 
 module.exports.register = async (req, res, next) => {
@@ -52,6 +53,23 @@ module.exports.login = async (req, res, next) => {
             return res.json({ msg: "Invalid password", status: false });
         delete usernameCheck.password;
         return res.json({status: true, user: usernameCheck});
+    }
+    catch(err){
+        next(err)
+    }
+}
+
+
+module.exports.adminLogin = async (req, res, next) => {
+    try{
+        const { password } = req.body;
+        const adminCheck = await Admin.findOne({ password })
+        if(!adminCheck){
+            return res.json({msg :"Incorrect Admin Password",status: false})
+
+        }else{
+            return res.json({status: true})
+        }
     }
     catch(err){
         next(err)

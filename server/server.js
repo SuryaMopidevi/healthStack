@@ -34,5 +34,3 @@ app.use("/api/auth",authRoutes)
 app.use("/api/products",productRoutes)
 app.use("/api/services",serviceRoutes)
 app.use("/api/users", userRoutes)
-
-console.log("Server.js")

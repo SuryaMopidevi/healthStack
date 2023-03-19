@@ -2,7 +2,7 @@ import "./Adminlogin.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { hostURL } from "../../URL";      
+import { adminLoginRoute } from "../../utils/APIRoutes";    
 
 function Adminlogin() {
   const history = useHistory();
@@ -13,10 +13,12 @@ function Adminlogin() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const res = await axios.get(`${hostURL}/admin`);
-    if (admin.password !== res.data[0].password) {
-      console.log("Unmatched")
-      alert("Please enter valid key");
+    const res = await axios.post(adminLoginRoute, {
+      password: admin.password
+    });
+    if (res.data.status === false) {
+      alert(res.data.msg);
+      return;
     } else {
       localStorage.setItem("admin", JSON.stringify({ admin: admin.password }));
       if (localStorage.getItem("admin") !== null) {
