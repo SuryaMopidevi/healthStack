@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Popup from "../components/Popup";
 import paymentImg from "../images/payment.gif";
 import axios from "axios";
-import { hostURL } from "../URL";
+import { transactionRoute } from "../utils/APIRoutes";
 
 const Cart = () => {
   const deliver = 40;
@@ -78,7 +78,7 @@ const Cart = () => {
     e.preventDefault();
     if (validateForm()) {
       axios
-        .post(`${hostURL}/orders`, {
+        .post(transactionRoute, {
           accountholder: payment.name,
           phone: payment.phone,
           accountnumber: payment.ac,
@@ -91,19 +91,34 @@ const Cart = () => {
           pincode: payment.pincode,
           address: payment.address,
         })
-        .then(() => {
-          toast.success("Payment Successful", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-          togglePopup();
-          window.location.reload();
+        .then((res) => {
+          if(res.data.status) {
+            toast.success("Ordered Successfully", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            togglePopup();
+            window.location.reload();
+          }
+          else{
+            toast.error("Order Unsuccessful", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            togglePopup();
+          }
         })
         .catch((err) => {
           toast.error("Something Went Wrong", {

@@ -7,3 +7,4 @@ export const pharmaceuticalProductsRoute = `${hostURL}/api/products/pharmaceutic
 export const productRoute = `${hostURL}/api/products`;
 export const queryRoute = `${hostURL}/api/services/query`;
 export const updateProfileRoute = `${hostURL}/api/users/updateprofile`;
+export const transactionRoute = `${hostURL}/api/services/transaction`;
