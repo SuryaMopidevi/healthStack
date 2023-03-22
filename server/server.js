@@ -1,6 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const morgan = require('morgan')
+const helmet = require('helmet')
 require('dotenv').config()
 
 // routers
@@ -8,12 +10,17 @@ const authRoutes = require('./routes/auth')
 const productRoutes = require('./routes/product')
 const serviceRoutes = require('./routes/service')
 const userRoutes = require('./routes/user')
+const { accessLogStream } = require('./middlewares/morganMiddleware')
 
 const app = express()
 
 // middlewares
+app.use(helmet())
 app.use(cors())
 app.use(express.json())
+
+// setup the logger
+app.use(morgan("tiny", { stream: accessLogStream }));
 
 // database connection
 mongoose.connect(process.env.MONGO_URL, {

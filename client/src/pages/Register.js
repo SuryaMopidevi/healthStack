@@ -67,7 +67,6 @@ const Register = () => {
         })
         
         if(res.data.status){
-          localStorage.setItem(USER_KEY, JSON.stringify({username:user.username, email:user.email, password: user.password}));
           setUser({
             firstname: "",
             lastname: "",
@@ -81,7 +80,7 @@ const Register = () => {
             address: "",
           });
           alert('Registered Successfully');
-          navigate("/");
+          navigate("/login");
         }
         else{
           alert(res.data.msg);
@@ -120,7 +119,7 @@ const Register = () => {
             address: "",
           });
           alert('Registered Successfully');
-          navigate("/");
+          navigate("/login");
         }
         else{
           alert(res.data.msg);

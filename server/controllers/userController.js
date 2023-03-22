@@ -14,3 +14,15 @@ module.exports.updateProfile = async (req, res, next) => {
         next(err);
     }
 };
+
+module.exports.uploadProfilePic = async (req, res, next) => {
+    try {
+        const { url, username } = req.body;
+        // console.log(req.body)
+        const user = await User.findOneAndUpdate({ username }, { profilePic: url });
+        // console.log(user)
+    }
+    catch (err) {
+        next(err);
+    }
+};

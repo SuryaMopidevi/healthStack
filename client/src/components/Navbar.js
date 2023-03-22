@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { Badge } from "@mui/material";
+import { Avatar, Badge } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Link } from "react-router-dom";
 import { mobile } from "../responsive";
@@ -114,7 +114,7 @@ const Navbar = () => {
               style={{ listStyle: "none", marginLeft: "5px" }}
             >
               <CDropdownToggle>
-                <span style={{ color: "black" }}>Hi, {user.username}</span>
+                  <span style={{color: "black"}}>Hi, {user.username}</span>
               </CDropdownToggle>
               <CDropdownMenu>
                 <Link to="/profile">

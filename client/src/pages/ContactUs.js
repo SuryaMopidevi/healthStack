@@ -7,6 +7,8 @@ import contact from "../images/contactus.gif";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import { queryRoute } from "../utils/APIRoutes";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ContactUs = () => {
   const navigate = useNavigate();
@@ -31,22 +33,39 @@ const ContactUs = () => {
         email: query.email,
         ques: query.ques,
         sug: query.sug,
+      },
+      {
+        headers: {
+          authorization: `Bearer ${JSON.parse(localStorage.getItem(USER_KEY)).accessToken}`
+        }
       })
       .then((res) => {
         if(res.data.status){
-          console.log("1")
           alert("Your query sent successfully");
           return;
         }
         else{
-          console.log("2")
           alert("Please enter your query evidently");
           return;
         }
       })
       .catch((err) => {
-        console.log("3")
-        alert("Please enter your query evidently");
+
+        if(err.response.status === 401 || err.response.status === 403){
+          toast.error("Unauthorized Access", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+          });
+        }
+        else{
+          alert("Please enter your query evidently");
+        }
         return;
       });
     setQuery({
@@ -143,6 +162,7 @@ const ContactUs = () => {
           </form>
         </FormDiv>
       </Container>
+      <ToastContainer />
       <Footer />
     </>
   );

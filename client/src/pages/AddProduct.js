@@ -6,7 +6,10 @@ import Announcement from "../components/Announcement";
 import addproduct from "../images/addproduct.gif";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { hostURL } from "../URL";
+import { productRoute } from "../utils/APIRoutes";
+import { addProductRoute } from "../utils/APIRoutes";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddProduct = () => {
   const [addProduct, setAddProduct] = useState({
@@ -18,16 +21,21 @@ const AddProduct = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   const [flag, setFlag] = useState(1);
+  const USER_KEY = "current user";
+
 
   useEffect(() => {
-    axios.get(`${hostURL}/products`).then((res) => {
+    axios.get(productRoute)
+    .then((res) => {
       setProducts(res.data);
-    });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }, []);
 
   const checkForDuplicate = () => {
     for (let i = 0; i < products.length; i++) {
-      console.log(addProduct.productname);
       if (products[i].productname === addProduct.productname) {
         alert("item alredy exits");
         setFlag(0);
@@ -44,18 +52,38 @@ const AddProduct = () => {
 
     if (flag === 1) {
       axios
-        .post(`${hostURL}/products`, {
+        .post(addProductRoute, {
           productname: addProduct.productname,
           img: addProduct.img,
           price: addProduct.price,
           status: "active",
           type: addProduct.type,
+        }, {
+          headers: {
+            authorization: "Bearer " + JSON.parse(localStorage.getItem(USER_KEY)).accessToken 
+          }
         })
-        .then(() => {
-          alert("Your Product has been added successfully");
+        .then((res) => {
+          if(res.data.status){
+            alert("Your Product added successfully");
+          }
         })
-        .catch(() => {
-          alert("Item already exits.So item can't be added.");
+        .catch((err) => {
+          if(err.response.status === 401 || err.response.status === 403){
+            toast.error("Unauthorized Access", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+          }
+          else{
+            alert("Item already exits.So item can't be added.");
+          }
         });
       setAddProduct({
         productname: "",
@@ -182,29 +210,13 @@ const AddProduct = () => {
                 </div>
               </div>
             </fieldset>
-            {/* <div class="form-group">
-              <label for="exampleInputPassword1">Category</label>
-              <input
-                type="number"
-                class="form-control"
-                id="exampleInputPassword1"
-                placeholder="Enter Category"
-                value={addProduct.category}
-                onChange={(e) => {
-                  setAddProduct({ ...addProduct, category: e.target.value });
-                }}
-                required
-              />
-              <small id="emailHelp" class="form-text text-muted">
-                We'll never share this information with anyone else.
-              </small>
-            </div> */}
             <button type="submit" class="btn btn-primary">
               ADD PRODUCT
             </button>
           </form>
         </FormDiv>
       </Container>
+      <ToastContainer />
       <Footer />
     </>
   );

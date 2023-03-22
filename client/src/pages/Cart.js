@@ -17,6 +17,7 @@ const Cart = () => {
   const deliver = 40;
   const [isOpen, setIsOpen] = useState(false);
   const { cart, total, totalCount } = useContext(ThemeContext);
+  const USER_KEY = "current user"
   const [payment, setPayment] = useState({
     name: "",
     phone: "",
@@ -90,6 +91,11 @@ const Cart = () => {
             parseInt(`${totalCount > 0 ? deliver : 0}`),
           pincode: payment.pincode,
           address: payment.address,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${JSON.parse(localStorage.getItem(USER_KEY)).accessToken}`
+          }
         })
         .then((res) => {
           if(res.data.status) {
@@ -121,18 +127,33 @@ const Cart = () => {
           }
         })
         .catch((err) => {
-          toast.error("Something Went Wrong", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-          togglePopup();
-        });
+          if(err.response.status === 401 || err.response.status === 403) {
+            toast.error("Unauthorized Access", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            togglePopup();
+          }
+          else{
+            toast.error("Something Went Wrong", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            togglePopup();
+          }
+      });
     }
   };
 

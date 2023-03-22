@@ -16,6 +16,7 @@ const Login = () => {
   });
   const [u, setU] = useState({});
   const USER_KEY = "current user";
+  const PROFILE_PHOTO_KEY = "profile photo";
 
   const checkUser = async (user) => {
     const res = await axios.post(loginRoute,{
@@ -25,6 +26,8 @@ const Login = () => {
       usertype: user.usertype,
     });
     if(res.data.status){
+      localStorage.setItem(USER_KEY, JSON.stringify({...user, accessToken: res.data.accessToken}));
+      localStorage.setItem(PROFILE_PHOTO_KEY, JSON.stringify({url: res.data.user.profilePic}));
       return true;
     }
     else{
@@ -38,7 +41,6 @@ const Login = () => {
     if ((await checkUser(user)) === false) {
       navigate("/register");
     } else {
-      localStorage.setItem(USER_KEY, JSON.stringify(user));
       navigate("/main");
     }
 

@@ -15,8 +15,6 @@ import AddProduct from "./pages/AddProduct";
 import Profile from "./pages/Profile";
 import FAQ from "./pages/FAQ";
 import PageNotFound from "./pages/404";
-import axios from "axios";
-import { cartRoute } from "./utils/APIRoutes";
 
 export const ThemeContext = createContext();
 

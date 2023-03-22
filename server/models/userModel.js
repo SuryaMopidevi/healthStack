@@ -29,19 +29,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    cart: {
-        type: [String],
-    },
-    products: {
-        type: [String],
+    profilePic: {
+        type: String,
     },
     status: {
         type: String,
         default: 'active'
-    },
-    transaction: {
-        type: Number,
-        default: 0
     },
     pincode: {
         type: String,
