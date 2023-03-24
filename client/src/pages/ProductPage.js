@@ -10,6 +10,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { productRoute } from "../utils/APIRoutes"; 
+import { USER_KEY } from "../utils/secretkeys";
 
 const ProductPage = () => {
   const { cart, setCart, totalCount, total, setTotal, setTotalCount } =
@@ -17,7 +18,6 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState({});
   const { id } = useParams();
-  const USER_KEY = "current user";
 
   useEffect(() => {
     axios

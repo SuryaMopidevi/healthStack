@@ -1,6 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
+const Announcement = () => {
+  return (
+    <Container>Introducing Health Stack healthcare services. Flash Service Sale🌟!</Container>
+  );
+};
+
 const Container = styled.div`
    height: 30px;
    background-color: teal;
@@ -11,11 +17,5 @@ const Container = styled.div`
    font-size: 14px;   
    font-weight: 500px;
 `;
-
-const Announcement = () => {
-  return (
-    <Container>Introducing Health Stack healthcare services. Flash Service Sale🌟!</Container>
-  );
-};
 
 export default Announcement;

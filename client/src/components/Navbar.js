@@ -11,9 +11,9 @@ import {
   CDropdownMenu,
   CDropdownItem,
 } from "@coreui/react";
+import { USER_KEY, PROFILE_PHOTO_KEY } from "../utils/secretkeys";
 
 const Navbar = () => {
-  const USER_KEY = "current user";
   const [user] = useState(JSON.parse(localStorage.getItem(USER_KEY)));
   const { cart, totalCount } = useContext(ThemeContext);
 

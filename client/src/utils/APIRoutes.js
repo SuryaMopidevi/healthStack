@@ -10,3 +10,5 @@ export const queryRoute = `${hostURL}/api/services/query`;
 export const updateProfileRoute = `${hostURL}/api/users/updateprofile`;
 export const transactionRoute = `${hostURL}/api/services/transaction`;
 export const profilePicRoute = `${hostURL}/api/users/profilepic`;
+export const profileDetailsRoute = `${hostURL}/api/users/profiledetails`;
+export const newPasswordRoute = `${hostURL}/api/auth/newPassword`;

@@ -12,12 +12,12 @@ import Popup from "../components/Popup";
 import paymentImg from "../images/payment.gif";
 import axios from "axios";
 import { transactionRoute } from "../utils/APIRoutes";
+import { USER_KEY } from "../utils/secretkeys";
 
 const Cart = () => {
   const deliver = 40;
   const [isOpen, setIsOpen] = useState(false);
   const { cart, total, totalCount } = useContext(ThemeContext);
-  const USER_KEY = "current user"
   const [payment, setPayment] = useState({
     name: "",
     phone: "",

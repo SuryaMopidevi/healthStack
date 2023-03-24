@@ -15,6 +15,13 @@ import AddProduct from "./pages/AddProduct";
 import Profile from "./pages/Profile";
 import FAQ from "./pages/FAQ";
 import PageNotFound from "./pages/404";
+import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPasswordEmail from "./pages/ForgotPasswordEmail";
+import ForgotPasswordOTP from "./pages/ForgotPasswordOTP";
+import NewPassword from "./pages/NewPassword";
+// import dotenv from 'dotenv';
+
+// dotenv.config();
 
 export const ThemeContext = createContext();
 
@@ -43,6 +50,10 @@ function App() {
           <Route path="/products/:id" element={<ProductPage />} />
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/otp" element = { <VerifyEmail /> } />
+          <Route path="/forgotPassword" element={<ForgotPasswordEmail />} />
+          <Route path="/forgotpasswordotp" element={<ForgotPasswordOTP />} />
+          <Route path="/newPassword" element={<NewPassword />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </ThemeContext.Provider>

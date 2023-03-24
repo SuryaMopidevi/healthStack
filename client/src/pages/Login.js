@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import emailjs from "@emailjs/browser";
 import { loginRoute } from "../utils/APIRoutes";
+import { USER_KEY, PROFILE_PHOTO_KEY } from "../utils/secretkeys";
 
 const Login = () => {
   const form = useRef();
@@ -15,8 +16,7 @@ const Login = () => {
     usertype: "",
   });
   const [u, setU] = useState({});
-  const USER_KEY = "current user";
-  const PROFILE_PHOTO_KEY = "profile photo";
+
 
   const checkUser = async (user) => {
     const res = await axios.post(loginRoute,{
@@ -143,13 +143,8 @@ const Login = () => {
             <Label>CONSUMER</Label>
           </Para>
           <p style={{ fontSize: "12px" }}>
-            <Link to="/login">
-              <b
-                onClick={() => {
-                  // getEmail();
-                  // sendEmailHandler();
-                }}
-              >
+            <Link to="/forgotPassword">
+              <b color={{color: "black"}}>
                 FORGOT PASSWORD
               </b>
             </Link>

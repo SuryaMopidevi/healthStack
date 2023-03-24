@@ -10,6 +10,7 @@ import { productRoute } from "../utils/APIRoutes";
 import { addProductRoute } from "../utils/APIRoutes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { USER_KEY } from "../utils/secretkeys";
 
 const AddProduct = () => {
   const [addProduct, setAddProduct] = useState({
@@ -21,7 +22,6 @@ const AddProduct = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   const [flag, setFlag] = useState(1);
-  const USER_KEY = "current user";
 
 
   useEffect(() => {

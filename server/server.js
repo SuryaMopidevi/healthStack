@@ -2,6 +2,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const morgan = require('morgan')
+const swaggerUI = require('swagger-ui-express')
+const swaggerJsDoc = require('swagger-jsdoc')
 const helmet = require('helmet')
 require('dotenv').config()
 
@@ -12,7 +14,41 @@ const serviceRoutes = require('./routes/service')
 const userRoutes = require('./routes/user')
 const { accessLogStream } = require('./middlewares/morganMiddleware')
 
+// swagger/openapi
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Healthstack API",
+            version: "1.0.0",
+            description: "This is documentation for Healthstack API",
+        },
+        components: {
+            securitySchemes: {
+              bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+              }
+            }
+          },
+          security: [{
+            bearerAuth: []
+          }],
+        servers: [
+            {
+                url: "http://localhost:5000",
+            }
+        ]
+    },
+    apis: ["./controllers/*.js"]
+}
+
+const specs = swaggerJsDoc(options)
+
 const app = express()
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs))
 
 // middlewares
 app.use(helmet())

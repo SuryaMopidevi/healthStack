@@ -8,12 +8,12 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
+import { USER_KEY } from "../utils/secretkeys";
 
 const Product = ({ item }) => {
   const navigate = useNavigate();
   const { cart, setCart, totalCount, setTotalCount, total, setTotal } =
     useContext(ThemeContext);
-  const USER_KEY = "current user";
 
   const cartHandler = () => {
     if (!localStorage.getItem(USER_KEY)) {

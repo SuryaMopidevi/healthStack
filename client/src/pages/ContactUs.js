@@ -9,6 +9,7 @@ import {useNavigate} from "react-router-dom";
 import { queryRoute } from "../utils/APIRoutes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { USER_KEY } from "../utils/secretkeys";
 
 const ContactUs = () => {
   const navigate = useNavigate();
@@ -18,7 +19,6 @@ const ContactUs = () => {
     ques: "",
     sug: "",
   });
-  const USER_KEY = "current user";
 
   const sendQueryHandler = (e) => {
     e.preventDefault();

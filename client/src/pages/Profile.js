@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -6,21 +6,37 @@ import Announcement from "../components/Announcement";
 import profileImg from "../images/profile.gif";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { profilePicRoute, updateProfileRoute } from "../utils/APIRoutes";
+import { profilePicRoute, updateProfileRoute, profileDetailsRoute } from "../utils/APIRoutes";
 import { Avatar, TextField } from "@mui/material";
 import { storage } from "../utils/firebase"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { USER_KEY, PROFILE_PHOTO_KEY } from "../utils/secretkeys";
 
 const Profile = () => {
-  const USER_KEY = "current user";
-  const PROFILE_PHOTO_KEY = "profile photo";
   const [profile, setProfile] = useState(
     JSON.parse(localStorage.getItem(USER_KEY))
   );
   const [actualName, setActualName] = useState(JSON.parse(localStorage.getItem(USER_KEY)).username);
+  const [actualEmail, setActualEmail] = useState(JSON.parse(localStorage.getItem(USER_KEY)).email);
   const [image, setImage] = useState(null);
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const [url, setUrl] = useState(localStorage.getItem(PROFILE_PHOTO_KEY) && JSON.parse(localStorage.getItem(PROFILE_PHOTO_KEY)).url);
   const navigate = useNavigate();
+
+  
+  useEffect(() => {
+    axios.post(profileDetailsRoute, {
+      email : actualEmail
+    })
+    .then((res) => {
+      setPhone(res.data.user.phone);
+      setAddress(res.data.user.address);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -29,7 +45,9 @@ const Profile = () => {
         username : profile.username,
         email : profile.email,
         password : profile.password,
-        actualName : actualName
+        actualName : actualName,
+        phone : phone,
+        address : address
       })
       .then((res) => {
         if(res.data.status) {
@@ -62,15 +80,15 @@ const Profile = () => {
     .then(()=>{
       getDownloadURL(imageRef)
       .then((url)=>{
-         setUrl(url)
-         localStorage.setItem(PROFILE_PHOTO_KEY, JSON.stringify({url: url}));
+          setUrl(url)
+          localStorage.setItem(PROFILE_PHOTO_KEY, JSON.stringify({url: url}));
         })
        .catch((error)=>{ 
           console.log(error)
        })
-      axios.post(profilePicRoute, { url, username: profile.username })
+      axios.post(profilePicRoute,{ url, username: profile.username })
       .then((res)=>{
-        console.log(res)
+        // console.log(res)
       })
       .catch((err)=>{
         console.log(err)
@@ -127,9 +145,6 @@ const Profile = () => {
                 }}
                 required
               />
-              <small id="emailHelp" class="form-text text-muted">
-                We'll never share this information with anyone else.
-              </small>
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Email</label>
@@ -144,9 +159,6 @@ const Profile = () => {
                 }}
                 required
               />
-              <small id="emailHelp" class="form-text text-muted">
-                We'll never share this information with anyone else.
-              </small>
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
@@ -162,9 +174,36 @@ const Profile = () => {
                 }}
                 required
               />
-              <small id="emailHelp" class="form-text text-muted">
-                We'll never share this information with anyone else.
-              </small>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Phone</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleInputPassword1"
+                placeholder="Phone"
+                minlength="10"
+                maxlength="10"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                }}
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Address</label>
+              <textarea
+                type="text"
+                class="form-control"
+                id="exampleInputPassword1"
+                placeholder="Address"
+                value={address}
+                onChange={(e) => {
+                  setAddress(e.target.value);
+                }}
+                required
+              />
             </div>
             <button type="submit" class="btn btn-primary">
               UPDATE PROFILE
