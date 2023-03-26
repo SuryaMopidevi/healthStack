@@ -3,6 +3,8 @@ import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {hostURL} from "../../URL";
+import { allUsersRoute } from "../../utils/APIRoutes";
+import { allProductsRoute } from "../../utils/APIRoutes";
 
 export default function FeaturedInfo() {
   const [user, setUser] = useState([]);
@@ -18,10 +20,11 @@ export default function FeaturedInfo() {
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/users`)
+    .get(allUsersRoute)
+      // .get(`${hostURL}/users`)
       .then((res) => {
         setUser(res.data);
-        return axios.get(`${hostURL}/products`);
+        return axios.get(allProductsRoute);
       })
       .then((res) => {
         setProduct(res.data);

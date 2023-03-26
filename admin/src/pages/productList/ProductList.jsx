@@ -96,7 +96,7 @@ export default function ProductList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/product/" + params.row._id}>
+            <Link to={"/product/" + params.row._doc._id}> {/*ekkada marchali */}
               <button className="productListEdit">See Info</button>
             </Link>
             {/* <DeleteOutline

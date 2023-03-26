@@ -7,13 +7,15 @@ import axios from "axios";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { hostURL } from "../../URL";
+import { queryRoute } from "../../utils/APIRoutes";
 
 export default function Queries() {
-  const [data, setData] = useState(productRows);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/queries`)
+    .get(queryRoute)
+      // .get(`${hostURL}/queries`)
       .then((res) => {
         setData(res.data);
       })
@@ -25,16 +27,28 @@ export default function Queries() {
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: "name",
+      field: "username",
       headerName: "Name",
       width: 200,
       renderCell: (params) => {
-        return <div className="productListItem">{params.row.name}</div>;
+        return <div className="productListItem">{params.row._doc.username}</div>;
       },
     },
-    { field: "email", headerName: "Email", width: 200 },
-    { field: "ques", headerName: "Query", width: 200 },
-    { field: "sug", headerName: "Suggestion", width: 150 },
+    { field: "email", headerName: "Email", width: 200,
+    renderCell: (params) => {
+      return <div className="productListItem">{params.row._doc.email}</div>;
+    },
+  },
+    { field: "ques", headerName: "Query", width: 200,
+    renderCell: (params) => {
+      return <div className="productListItem">{params.row._doc.ques}</div>;
+    },
+   },
+    { field: "sug", headerName: "Suggestion", width: 150 ,
+    renderCell: (params) => {
+      return <div className="productListItem">{params.row._doc.sug}</div>;
+    },
+  },
 
     {
       field: "action",

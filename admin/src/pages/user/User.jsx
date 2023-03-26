@@ -14,6 +14,7 @@ import { AccountCircleOutlined } from "@material-ui/icons";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { hostURL } from "../../URL";
+import { userRoute } from "../../utils/APIRoutes";
 
 export default function User() {
   const { userId } = useParams();
@@ -21,7 +22,7 @@ export default function User() {
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/users/${userId}`)
+    .get(`${userRoute}/${userId}`)
       .then((res) => {
         setUser(res.data);
       })

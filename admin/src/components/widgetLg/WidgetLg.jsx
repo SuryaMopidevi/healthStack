@@ -2,15 +2,17 @@ import { useState, useEffect } from "react";
 import "./widgetLg.css";
 import axios from "axios";
 import { hostURL } from "../../URL";
+import { TransactionRoute } from "../../utils/APIRoutes";
 
 export default function WidgetLg() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/orders?_limit=5`)
+        .get(TransactionRoute)
+      // .get(`${hostURL}/orders?_limit=5`)
       .then((res) => {
-        setOrders(res.data);
+        setOrders(res.data.slice(0,5));
       })
       .catch((err) => {
         console.log(err);
@@ -31,11 +33,11 @@ export default function WidgetLg() {
           return (
             <tr className="widgetLgTr">
               <td className="widgetLgUser">
-                <span className="widgetLgName">{o.accountholder}</span>
+                <span className="widgetLgName">{o._doc.accountholder}</span>
               </td>
-              <td className="widgetLgPhone">{o.phone}</td>
-              <td className="widgetLgAccountNumber">{o.accountnumber}</td>
-              <td className="widgetLgAmount">Rs.{o.amount}</td>
+              <td className="widgetLgPhone">{o._doc.phone}</td>
+              <td className="widgetLgAccountNumber">{o._doc.accountnumber}</td>
+              <td className="widgetLgAmount">Rs.{o._doc.amount}</td>
             </tr>
           );
         })}

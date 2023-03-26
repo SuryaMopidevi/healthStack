@@ -7,13 +7,15 @@ import axios from "axios";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { hostURL } from "../../URL";
+import { TransactionRoute } from "../../utils/APIRoutes";
 
 export default function Transaction() {
-  const [data, setData] = useState(productRows);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/orders`)
+    .get(TransactionRoute)
+      // .get(`${hostURL}/orders`)
       .then((res) => {
         setData(res.data);
       })
@@ -30,17 +32,41 @@ export default function Transaction() {
       width: 200,
       renderCell: (params) => {
         return (
-          <div className="productListItem">{params.row.accountholder}</div>
+          <div className="productListItem">{params.row._doc.accountholder}</div>
         );
       },
     },
-    { field: "phone", headerName: "Phone Number", width: 200 },
-    { field: "accountnumber", headerName: "Account Number", width: 200 },
-    { field: "ifsc", headerName: "IFSC Code", width: 150 },
+    { field: "phone", headerName: "Phone Number", width: 200,
+    renderCell: (params) => {
+      return (
+        <div className="productListItem">{params.row._doc.phone}</div>
+      );
+    }, 
+  
+  },
+    { field: "accountnumber", headerName: "Account Number", width: 200,
+    renderCell: (params) => {
+      return (
+        <div className="productListItem">{params.row._doc.accountnumber}</div>
+      );
+    },
+  },
+    { field: "ifsc", headerName: "IFSC Code", width: 150,
+    renderCell: (params) => {
+      return (
+        <div className="productListItem">{params.row._doc.ifsc}</div>
+      );
+    },
+  },
     {
       field: "amount",
       headerName: "Amount",
       width: 150,
+      renderCell: (params) => {
+        return (
+          <div className="productListItem">{params.row._doc.amount}</div>
+        );
+      },
     },
   ];
 

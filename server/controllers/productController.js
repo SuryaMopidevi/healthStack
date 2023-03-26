@@ -66,10 +66,11 @@ module.exports.allProducts = async(req,res,next) => {
         for(let i=0; i<products.length; i++){
             productArray.push({...products[i], id : i + 1})
         }
-        console.log(productArray)
+        // console.log(productArray)
         return res.json(productArray)
     }
     catch(err){
        next(err);
    }
 }
+

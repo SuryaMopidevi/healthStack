@@ -8,6 +8,7 @@ import axios from "axios";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { hostURL } from "../../URL";
+import { productRoute } from "../../utils/APIRoutes";
 
 export default function Product() {
   const [product, setProduct] = useState({});
@@ -15,8 +16,9 @@ export default function Product() {
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/products/${productId}`)
+      .get(`${productRoute}/${productId}`)
       .then((res) => {
+        console.log(res.data);
         setProduct(res.data);
       })
       .catch((err) => {
