@@ -4,15 +4,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import {hostURL} from "../../URL";
+import { allUsersRoute } from "../../utils/APIRoutes";
 
 export default function WidgetSm() {
   const [newMembers, setNewMembers] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/users?_limit=5`)
+    .get(allUsersRoute)
+      // .get(`${allUsersRoute}/users?_limit=5`)
       .then((res) => {
-        setNewMembers(res.data);
+        setNewMembers(res.data.slice(0,5));
       })
       .catch((err) => {
         console.log(err);
@@ -27,10 +29,11 @@ export default function WidgetSm() {
           return (
             <li className="widgetSmListItem">
               <div className="widgetSmUser">
-                <span className="widgetSmUsername">{user.username}</span>
-                <span className="widgetSmUserTitle">{user.usertype}</span>
+                <span className="widgetSmUsername">{user._doc.username}</span>
+                <span className="widgetSmUserTitle">{user._doc.usertype}</span>
               </div>
-              <Link to={`/user/${user.id}`}>
+              {/* <Link to={"/user/" + params.row._doc._id}> */}
+              <Link to={`/user/${user._doc._id}`}>
                 <button className="widgetSmButton">
                   <Visibility className="widgetSmIcon" />
                   Display

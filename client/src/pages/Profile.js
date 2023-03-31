@@ -76,6 +76,8 @@ const Profile = () => {
 
   const imageSubmitHandler = async () => {
     const imageRef = ref(storage, profile.username);
+    const data = new FormData();
+    data.append("file", image);
     uploadBytes(imageRef, image)
     .then(()=>{
       getDownloadURL(imageRef)
@@ -86,7 +88,7 @@ const Profile = () => {
        .catch((error)=>{ 
           console.log(error)
        })
-      axios.post(profilePicRoute,{ url, username: profile.username })
+      axios.post(profilePicRoute,{ url, username: profile.username, data })
       .then((res)=>{
         // console.log(res)
       })
@@ -116,6 +118,7 @@ const Profile = () => {
           />
             <TextField 
               type="file"
+              name="file"
               accept="image/*" 
               onChange={imageChangeHandler}
               style = {{margin: "20px 15px"}}
@@ -158,6 +161,7 @@ const Profile = () => {
                   setProfile({ ...profile, email: e.target.value });
                 }}
                 required
+                readOnly
               />
             </div>
             <div class="form-group">

@@ -10,6 +10,7 @@ router.get('/healthcare',healthcare)
 router.get('/pharmaceutical',pharmaceutical)
 router.post('/newProduct', verifyToken, newProduct)
 router.post('/:id', product)
+// router.get('/:id', productAdmin)
 
 module.exports = router
 

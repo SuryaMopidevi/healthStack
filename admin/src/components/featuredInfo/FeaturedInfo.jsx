@@ -3,6 +3,8 @@ import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {hostURL} from "../../URL";
+import { allUsersRoute } from "../../utils/APIRoutes";
+import { allProductsRoute } from "../../utils/APIRoutes";
 
 export default function FeaturedInfo() {
   const [user, setUser] = useState([]);
@@ -18,10 +20,11 @@ export default function FeaturedInfo() {
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/users`)
+    .get(allUsersRoute)
+      // .get(`${hostURL}/users`)
       .then((res) => {
         setUser(res.data);
-        return axios.get(`${hostURL}/products`);
+        return axios.get(allProductsRoute);
       })
       .then((res) => {
         setProduct(res.data);
@@ -42,29 +45,13 @@ export default function FeaturedInfo() {
         <span className="featuredTitle">Active users</span>
         <div className="featuredMoneyContainer">
           <span className="featuredMoney">{user.length}</span>
-          <span className="featuredMoneyRate">
-            +{user.length*0.01}% <ArrowUpward className="featuredIcon positive" />
-          </span>
         </div>
         <span className="featuredSub">Comparitvely</span>
       </div>
-      {/* <div className="featuredItem">
-        <span className="featuredTitle">Sales</span>
-        <div className="featuredMoneyContainer">
-          <span className="featuredMoney">₹{total}</span>
-          <span className="featuredMoneyRate">
-          +{total*0.01}% <ArrowUpward className="featuredIcon" />
-          </span>
-        </div>
-        <span className="featuredSub">Comparaively</span>
-      </div> */}
       <div className="featuredItem">
         <span className="featuredTitle">Products</span>
         <div className="featuredMoneyContainer">
           <span className="featuredMoney">{product.length}</span>
-          <span className="featuredMoneyRate">
-            +{product.length*0.01}% <ArrowUpward className="featuredIcon" />
-          </span>
         </div>
         <span className="featuredSub">Comparatively</span>
       </div>

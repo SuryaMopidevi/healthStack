@@ -8,14 +8,16 @@ import { userRows } from "../../dummyData";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { hostURL } from "../../URL";
+import { allUsersRoute } from "../../utils/APIRoutes";
 
 export default function UserList() {
-  const [data, setData] = useState(userRows);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${hostURL}/users`)
+      .get(allUsersRoute)
       .then((res) => {
+        console.log(res.data)
         setData(res.data);
       })
       .catch((err) => {
@@ -23,41 +25,66 @@ export default function UserList() {
       });
   }, []);
 
-  const handleDelete = (id) => {
-    axios
-      .delete(`${hostURL}/users/` + id)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const handleDelete = (id) => {
+  //   axios
+  //     .delete(`${hostURL}/users/` + id)
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: "user",
+      field: "username",
       headerName: "User",
       width: 200,
       renderCell: (params) => {
         return (
           <>
-            <div className="userListUser">{params.row.username}</div>
+            <div className="userListUser">{params.row._doc.username}</div>
           </>
         );
       },
     },
-    { field: "email", headerName: "Email", width: 200 },
+    { field: "email",
+     headerName: "Email", 
+     width: 200,
+     renderCell: (params) => {
+      return (
+        <>
+          <div className="userListUser">{params.row._doc.email}</div>
+        </>
+      );
+    },
+    
+    },
     {
       field: "status",
       headerName: "Status",
       width: 120,
+      renderCell: (params) => {
+        return (
+          <>
+            <div className="userListUser">{params.row._doc.status}</div>
+          </>
+        );
+      },
     },
     {
       field: "usertype",
       headerName: "Usertype",
       width: 140,
+      renderCell: (params) => {
+        return (
+          <>
+            <div className="userListUser">{params.row._doc.usertype}</div>
+          </>
+        );
+      },
     },
     {
       field: "action",
@@ -66,13 +93,13 @@ export default function UserList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/user/" + params.row.id}>
+            <Link to={"/user/" + params.row._doc._id}>
               <button className="userListEdit">See Info</button>
             </Link>
-            <DeleteOutline
+            {/* <DeleteOutline
               className="userListDelete"
-              onClick={() => handleDelete(params.row.id)}
-            />
+              onClick={() => handleDelete(params.row._doc.id)}
+            /> */}
           </>
         );
       },

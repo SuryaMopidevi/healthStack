@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Admin = require('../models/adminLoginModel')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -240,6 +241,64 @@ module.exports.newPassword = async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = await User.findOneAndUpdate({ email: email } , {password: hashedPassword, confirmPassword: hashedPassword });
         return res.json({status: true, user: user});
+    }
+    catch(err){
+        next(err)
+    }
+}
+
+
+/**
+ * @swagger
+ * tags:
+ *   name: Admin Authentication
+ *   description: The admin authentication managing API
+ */
+
+
+/**
+ * @swagger
+ * /api/auth/adminLogin:
+ *  post:
+ *   summary: Login a admin
+ *   tags: [Admin Authentication]
+ *   requestBody:
+ *    required: true
+ *    content:
+ *     application/json:
+ *      schema:
+ *       type: object
+ *       properties:
+ *        password:
+ *         type: string
+ *         description: The password of the admin
+ *   responses:
+ *    200:
+ *     description: Admin successfully logged in
+ *     content:
+ *      application/json:
+ *       schema:
+ *         type: object
+ *         properties:  
+ *          status:
+ *           type: boolean
+ *           description: The status of the admin login
+ *          msg:
+ *           type: string
+ *           description: The message of the admin login status
+ */
+
+
+module.exports.adminLogin = async (req, res, next) => {
+    try{
+        const { password } = req.body;
+        const adminCheck = await Admin.findOne({ password })
+        if(!adminCheck){
+            return res.json({msg :"Incorrect Admin Password",status: false})
+
+        }else{
+            return res.json({status: true})
+        }
     }
     catch(err){
         next(err)
