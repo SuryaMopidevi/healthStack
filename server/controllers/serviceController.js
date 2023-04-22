@@ -1,6 +1,8 @@
-const Query = require('../models/queryModel')
-const Transaction = require('../models/transactionModel')
-
+const Query = require("../models/queryModel");
+const Transaction = require("../models/transactionModel");
+const Prescription = require("../models/prescriptionModel");
+const User = require("../models/userModel");
+const Product = require("../models/productModel");
 
 /**
  * @swagger
@@ -28,14 +30,12 @@ const Transaction = require('../models/transactionModel')
  *      description: suggestion of the user
  */
 
-
 /**
  * @swagger
  * tags:
  *  name: Query
  *  description: The query managing API
-*/
-
+ */
 
 /**
  * @swagger
@@ -53,33 +53,30 @@ const Transaction = require('../models/transactionModel')
  *       ref: '#/components/schemas/Query'
  *   responses:
  *    200:
- *     description: The query sent successfully 
+ *     description: The query sent successfully
  *     content:
  *      application/json:
  *       schema:
- *         status: 
+ *         status:
  *          type: boolean
  */
 
-
 module.exports.query = async (req, res, next) => {
-    try {
-        const { name, email, ques, sug } = req.body;
-        const query = new Query({
-            username: name,
-            email,
-            ques,
-            sug
-        });
-        
-        await query.save();
-        return res.json({status: true})
-    }
-    catch(err) {
-        next(err);
-    }
-}
+  try {
+    const { name, email, ques, sug } = req.body;
+    const query = new Query({
+      username: name,
+      email,
+      ques,
+      sug,
+    });
 
+    await query.save();
+    return res.json({ status: true });
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
  * @swagger
@@ -96,22 +93,19 @@ module.exports.query = async (req, res, next) => {
  *         ref: '#/components/schemas/Query'
  */
 
-
-module.exports.allQueries = async(req,res,next) => {
-    try{
-        const queries = await Query.find({})
-        const queryArray = []
-        for(let i=0; i<queries.length; i++){
-            queryArray.push({...queries[i], id : i + 1})
-        }
-        // console.log(queryArray)
-        return res.json(queryArray)
+module.exports.allQueries = async (req, res, next) => {
+  try {
+    const queries = await Query.find({});
+    const queryArray = [];
+    for (let i = 0; i < queries.length; i++) {
+      queryArray.push({ ...queries[i], id: i + 1 });
     }
-    catch(err){
-       next(err);
-   }
-}
-
+    // console.log(queryArray)
+    return res.json(queryArray);
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
  * @swagger
@@ -146,19 +140,17 @@ module.exports.allQueries = async(req,res,next) => {
  *     pincode:
  *      type: string
  *      description: pincode of the user location
- *     address: 
- *      type: string 
+ *     address:
+ *      type: string
  *      description: address of the user
  */
-
 
 /**
  * @swagger
  * tags:
  *  name: Transaction
  *  description: The transaction managing API
-*/
-
+ */
 
 /**
  * @swagger
@@ -180,31 +172,36 @@ module.exports.allQueries = async(req,res,next) => {
  *     content:
  *      application/json:
  *       schema:
- *         status: 
+ *         status:
  *          type: boolean
  */
 
-
 module.exports.transaction = async (req, res, next) => {
-    try {
-        const { accountholder, phone, accountnumber, ifsc, amount, pincode, address } = req.body;
-        const transaction = new Transaction({
-            accountholder,
-            phone,
-            accountnumber,
-            ifsc,
-            amount,
-            pincode,
-            address
-        });
-        await transaction.save();
-        return res.json({status: true})
-    }
-    catch(err) {
-        next(err);
-    }
-}
-
+  try {
+    const {
+      accountholder,
+      phone,
+      accountnumber,
+      ifsc,
+      amount,
+      pincode,
+      address,
+    } = req.body;
+    const transaction = new Transaction({
+      accountholder,
+      phone,
+      accountnumber,
+      ifsc,
+      amount,
+      pincode,
+      address,
+    });
+    await transaction.save();
+    return res.json({ status: true });
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
  * @swagger
@@ -221,18 +218,28 @@ module.exports.transaction = async (req, res, next) => {
  *         ref: '#/components/schemas/Transaction'
  */
 
-
-module.exports.allTransactions = async(req,res,next) => {
-    try{
-        const transactions = await Transaction.find({})
-        const transactionArray = []
-        for(let i=0; i<transactions.length; i++){
-            transactionArray.push({...transactions[i], id : i + 1})
-        }
-        // console.log(queryArray)
-        return res.json(transactionArray)
+module.exports.allTransactions = async (req, res, next) => {
+  try {
+    const transactions = await Transaction.find({});
+    const transactionArray = [];
+    for (let i = 0; i < transactions.length; i++) {
+      transactionArray.push({ ...transactions[i], id: i + 1 });
     }
-    catch(err){
-       next(err);
-   }
-}	
+    // console.log(queryArray)
+    return res.json(transactionArray);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.prescriptionUpload = async (req, res, next) => {
+  try {
+    const { url, username, productname } = req.body;
+    const user = await User.findOne({ username });
+    const product = await Product.findOne({ productname });
+    const prescription = new Prescription({ user, product, prescription: url });
+    await prescription.save();
+  } catch (err) {
+    next(err);
+  }
+};

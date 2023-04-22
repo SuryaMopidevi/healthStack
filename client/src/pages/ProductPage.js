@@ -8,22 +8,36 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../App";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { Avatar, TextField } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
-import { productRoute } from "../utils/APIRoutes"; 
+import { prescriptionRoute, productRoute } from "../utils/APIRoutes";
 import { USER_KEY } from "../utils/secretkeys";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../utils/firebase";
 
 const ProductPage = () => {
   const { cart, setCart, totalCount, total, setTotal, setTotalCount } =
     useContext(ThemeContext);
   const navigate = useNavigate();
   const [product, setProduct] = useState({});
+  const [file, setFile] = useState(null);
+  const [fileUrl, setFileUrl] = useState(null);
   const { id } = useParams();
+  const [actualName, setActualName] = useState(
+    JSON.parse(localStorage.getItem(USER_KEY)) && JSON.parse(localStorage.getItem(USER_KEY)).username
+  );
+  const [flag, setFlag] = useState(null);
 
   useEffect(() => {
     axios
       .post(`${productRoute}/${id}`)
       .then((res) => {
-          setProduct(res.data);
+        setProduct(res.data);
+        if (product.category === "otc") {
+          setFlag(true);
+        } else {
+          setFlag(false);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -72,6 +86,57 @@ const ProductPage = () => {
     }
   };
 
+  const fileChangeHandler = (e) => {
+    if(!actualName){
+      alert("Please Register");
+      navigate("/register");
+      return;
+    }
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const fileUploadHandler = async () => {
+    const fileRef = ref(
+      storage,
+      actualName + "_" + product.productname + "_prescription"
+    );
+    uploadBytes(fileRef, file).then(() => {
+      getDownloadURL(fileRef)
+        .then((url) => {
+          setFileUrl(url);
+          axios
+            .post(
+              prescriptionRoute,
+              {
+                url: url,
+                username: actualName,
+                productname: product.productname,
+              },
+              {
+                headers: {
+                  authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem(USER_KEY)).accessToken
+                  }`,
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          setFile(null);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+    setFlag(true);
+  };
+
   return (
     <Container>
       <Announcement />
@@ -89,9 +154,40 @@ const ProductPage = () => {
             natus veritatis atque reiciendis deleniti?
           </Desc>
           <Price>Rs.{product.price}</Price>
-          <AddContainer>
-            <Button onClick={cartHandler}>ADD TO CART</Button>
-          </AddContainer>
+          {product.category === "otc" && (
+            <AddContainer>
+              <Button onClick={cartHandler}>ADD TO CART</Button>
+            </AddContainer>
+          )}
+          {product.category === "prescribe" && flag && (
+            <AddContainer>
+              <Button onClick={cartHandler}>ADD TO CART</Button>
+            </AddContainer>
+          )}
+          {product.category === "prescribe" && (
+            <>
+              <P>UPLOAD DOCTOR PRESCRIPTION</P>
+              <TextField
+                type="file"
+                name="file"
+                accept="image/*"
+                style={{ margin: "5px 0" }}
+                onChange={fileChangeHandler}
+              />
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style={{
+                  margin: "10px 10px 0px 10px",
+                  height: "7%",
+                  width: "6%",
+                }}
+                onClick={fileUploadHandler}
+              >
+                &#x2714;
+              </button>
+            </>
+          )}
         </InfoContainer>
       </Wrapper>
       <ToastContainer />
@@ -125,6 +221,12 @@ const InfoContainer = styled.div`
 
 const Title = styled.h1`
   font-weight: 500;
+`;
+
+const P = styled.p`
+  font-weight: 500;
+  font-size: 20px;
+  margin: 20px 0 0 0;
 `;
 
 const Desc = styled.p`

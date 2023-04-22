@@ -17,8 +17,8 @@ const addProducts = async (productList) => {
     try {
         await Product.deleteMany({})
         for(let i=0; i<productList.length; i++) {
-            const {productname, img, price, status, type} = productList[i]
-            const product = new Product({productname: productname, img: img, price: price, status: status, type: type})
+            const {productname, img, price, status, type, category} = productList[i]
+            const product = new Product({productname: productname, img: img, price: price, status: status, type: type, category: category})
             await product.save()
         }
     }

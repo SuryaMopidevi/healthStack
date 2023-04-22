@@ -12,3 +12,4 @@ export const transactionRoute = `${hostURL}/api/services/transaction`;
 export const profilePicRoute = `${hostURL}/api/users/profilepic`;
 export const profileDetailsRoute = `${hostURL}/api/users/profiledetails`;
 export const newPasswordRoute = `${hostURL}/api/auth/newPassword`;
+export const prescriptionRoute = `${hostURL}/api/services/prescription`;

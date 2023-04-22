@@ -50,7 +50,6 @@ const ContactUs = () => {
         }
       })
       .catch((err) => {
-
         if(err.response.status === 401 || err.response.status === 403){
           toast.error("Unauthorized Access", {
               position: "bottom-right",

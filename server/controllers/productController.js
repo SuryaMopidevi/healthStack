@@ -229,3 +229,22 @@ module.exports.allProducts = async(req,res,next) => {
        next(err);
    }
 }
+
+
+module.exports.addProduct = async (req,res,next) => {
+    try {
+        const { productname, img, type, price, status } = req.body;
+        const productCheck = await Product.findOne({ productname })
+        if(!productCheck){ 
+            const product = new Product({productname, img, type, price, status});
+            await product.save();
+            return res.json({status : true})
+        }
+        else{
+            return res.json({status : false})
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+}

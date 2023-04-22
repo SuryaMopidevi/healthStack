@@ -1,5 +1,5 @@
 export const hostURL = "http://localhost:5000";
-export const addProductRoute = `${hostURL}/api/products/newProduct`;
+export const addProductRoute = `${hostURL}/api/products/addProduct`;
 export const allProductsRoute = `${hostURL}/api/products`;
 export const adminLoginRoute = `${hostURL}/api/auth/adminLogin`;
 export const productRoute = `${hostURL}/api/products`;

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { profilePicRoute, updateProfileRoute, profileDetailsRoute } from "../utils/APIRoutes";
 import { Avatar, TextField } from "@mui/material";
 import { storage } from "../utils/firebase"
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { USER_KEY, PROFILE_PHOTO_KEY } from "../utils/secretkeys";
 
 const Profile = () => {
