@@ -13,3 +13,5 @@ export const profilePicRoute = `${hostURL}/api/users/profilepic`;
 export const profileDetailsRoute = `${hostURL}/api/users/profiledetails`;
 export const newPasswordRoute = `${hostURL}/api/auth/newPassword`;
 export const prescriptionRoute = `${hostURL}/api/services/prescription`;
+export const addCommentRoute = `${hostURL}/api/services/addcomment`;
+export const allCommentsRoute = `${hostURL}/api/services/allcomments`;

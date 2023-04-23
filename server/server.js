@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const swaggerUI = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
 const helmet = require('helmet')
+const redis = require('redis')
 require('dotenv').config()
 
 // routers
@@ -37,7 +38,7 @@ const options = {
           }],
         servers: [
             {
-                url: "http://localhost:5000",
+                url: URL,
             }
         ]
     },

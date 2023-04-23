@@ -16,6 +16,10 @@ const Product = ({ item }) => {
     useContext(ThemeContext);
 
   const cartHandler = () => {
+    if (item.category === "prescribe") {
+      alert("Please upload the Doctor Prescription");
+      return;
+    }
     if (!localStorage.getItem(USER_KEY)) {
       navigate("/register");
     } else {

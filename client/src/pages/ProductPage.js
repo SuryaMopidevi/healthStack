@@ -14,6 +14,8 @@ import { prescriptionRoute, productRoute } from "../utils/APIRoutes";
 import { USER_KEY } from "../utils/secretkeys";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../utils/firebase";
+import AddCustomerReview from "../components/AddCustomerReview";
+import CustomerReviews from "../components/CustomerReviews";
 
 const ProductPage = () => {
   const { cart, setCart, totalCount, total, setTotal, setTotalCount } =
@@ -24,7 +26,8 @@ const ProductPage = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const { id } = useParams();
   const [actualName, setActualName] = useState(
-    JSON.parse(localStorage.getItem(USER_KEY)) && JSON.parse(localStorage.getItem(USER_KEY)).username
+    JSON.parse(localStorage.getItem(USER_KEY)) &&
+      JSON.parse(localStorage.getItem(USER_KEY)).username
   );
   const [flag, setFlag] = useState(null);
 
@@ -87,7 +90,7 @@ const ProductPage = () => {
   };
 
   const fileChangeHandler = (e) => {
-    if(!actualName){
+    if (!actualName) {
       alert("Please Register");
       navigate("/register");
       return;
@@ -165,20 +168,20 @@ const ProductPage = () => {
             </AddContainer>
           )}
           {product.category === "prescribe" && (
-            <>
-              <P>UPLOAD DOCTOR PRESCRIPTION</P>
+            <Div>
+              <P>Doctor Prescription</P>
               <TextField
                 type="file"
                 name="file"
                 accept="image/*"
-                style={{ margin: "5px 0" }}
+                style={{ margin: "10px 0" }}
                 onChange={fileChangeHandler}
               />
               <button
                 type="submit"
                 class="btn btn-primary"
                 style={{
-                  margin: "10px 10px 0px 10px",
+                  margin: "16px 10px 0px 10px",
                   height: "7%",
                   width: "6%",
                 }}
@@ -186,8 +189,15 @@ const ProductPage = () => {
               >
                 &#x2714;
               </button>
-            </>
+            </Div>
           )}
+          <Div>
+            <AddCustomerReview
+              productname={product.productname}
+              username={actualName}
+            />
+            <CustomerReviews productname={product.productname} />
+          </Div>
         </InfoContainer>
       </Wrapper>
       <ToastContainer />
@@ -258,6 +268,10 @@ const Button = styled.button`
     color: white;
     background-color: black;
   }
+`;
+
+const Div = styled.div`
+  margin-top: 10%;
 `;
 
 export default ProductPage;

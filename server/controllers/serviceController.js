@@ -3,6 +3,7 @@ const Transaction = require("../models/transactionModel");
 const Prescription = require("../models/prescriptionModel");
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
+const Review = require("../models/reviewModel");
 
 /**
  * @swagger
@@ -239,6 +240,31 @@ module.exports.prescriptionUpload = async (req, res, next) => {
     const product = await Product.findOne({ productname });
     const prescription = new Prescription({ user, product, prescription: url });
     await prescription.save();
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.addComment = async (req, res, next) => {
+  try {
+    const { comment, username, productname } = req.body;
+    // console.log(req.body)
+    // await Review.deleteMany({})
+    const user = await User.findOne({ username });
+    const product = await Product.findOne({ productname });
+    const review = new Review({ user, product, comment });
+    await review.save();
+    return res.json({ status: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.allComments = async (req, res, next) => {
+  try {
+    const reviews = await Review.find({}).populate("user").populate("product");
+    // console.log(reviews);
+    return res.json(reviews);
   } catch (err) {
     next(err);
   }

@@ -1,8 +1,8 @@
-const User = require('../models/userModel');
-const Admin = require('../models/adminLoginModel')
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
+const User = require("../models/userModel");
+const Admin = require("../models/adminLoginModel");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const client = require("../utils/RedisServer");
 
 /**
  * @swagger
@@ -60,14 +60,12 @@ const jwt = require('jsonwebtoken');
  *      description: The address of the user
  */
 
-
 /**
  * @swagger
  * tags:
  *  name: Authentication
  *  description: The authentication managing API
-*/
-
+ */
 
 /**
  * @swagger
@@ -87,46 +85,67 @@ const jwt = require('jsonwebtoken');
  *       content:
  *        application/json:
  *          schema:
- *            ref: '#/components/schemas/User'         
+ *            ref: '#/components/schemas/User'
  */
 
-
 module.exports.register = async (req, res, next) => {
-    try {
-        const { firstname, lastname, username, 
-            email, password, confirmPassword, 
-            usertype, pincode, phone, address,
-            cart, status, transaction, products } = req.body;
-        const usernameCheck = await User.findOne({username});
-        if(usernameCheck)
-            return res.json({ msg: "Username already exists", status: false });
-        const emailCheck = await User.findOne({email});
-        if(emailCheck)
-            return res.json({ msg: "Email already exists", status: false });
-        const hashedPassword = await bcrypt.hash(password, 12);
-        const user = await User.create({
-            firstname,
-            lastname,
-            username,
-            email,
-            password: hashedPassword,
-            confirmPassword: hashedPassword,
-            usertype,
-            pincode,
-            phone,
-            address,
-            status,
-            transaction,
-            cart,
-            products,
-        })
-        delete user.password;
-        return res.json({status: true, user });
-    }
-    catch(err){
-        next(err)
-    }
-}
+  try {
+    const {
+      firstname,
+      lastname,
+      username,
+      email,
+      password,
+      confirmPassword,
+      usertype,
+      pincode,
+      phone,
+      address,
+      cart,
+      status,
+      transaction,
+      products,
+    } = req.body;
+    const usernameCheck = await User.findOne({ username });
+    if (usernameCheck)
+      return res.json({ msg: "Username already exists", status: false });
+    const emailCheck = await User.findOne({ email });
+    if (emailCheck)
+      return res.json({ msg: "Email already exists", status: false });
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = await User.create({
+      firstname,
+      lastname,
+      username,
+      email,
+      password: hashedPassword,
+      confirmPassword: hashedPassword,
+      usertype,
+      pincode,
+      phone,
+      address,
+      status,
+      transaction,
+      cart,
+      products,
+    });
+    delete user.password;
+
+    // Set data to Redis Cache
+    client.set(
+      username,
+      JSON.stringify({
+        email,
+        password,
+        usertype,
+      })
+    );
+
+    return res.json({ status: true, user });
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
  * @swagger
@@ -168,85 +187,88 @@ module.exports.register = async (req, res, next) => {
  *              ref: '#/components/schemas/User'
  *              description: The user details
  *            accessToken:
- *              type: string 
- *              description: The accessToken of the user         
+ *              type: string
+ *              description: The accessToken of the user
  */
 
-
 module.exports.login = async (req, res, next) => {
-    try{
-        const {username, email, password, usertype} = req.body;
-        const usernameCheck = await User.findOne({username})
-        if(!usernameCheck)
-            return res.json({ msg: "Invalid username", status: false });
-        const emailCheck = await User.findOne({email})
-        if(!emailCheck)
-            return res.json({ msg: "Invalid email", status: false });
-        const passwordCheck = await bcrypt.compare(password, usernameCheck.password);
-        if(!passwordCheck)
-            return res.json({ msg: "Invalid password", status: false });
-        const accessToken = jwt.sign({
-            username: usernameCheck.username,
-            email: usernameCheck.email,
-            usertype: usernameCheck.usertype,
-        }, process.env.JWT_SECRET_KEY);
-        delete usernameCheck.password;
-        // console.log(usernameCheck)
-        return res.json({status: true, user: usernameCheck, accessToken});
-    }
-    catch(err){
-        next(err)
-    }
-}
+  try {
+    const { username, email, password, usertype } = req.body;
+    const usernameCheck = await User.findOne({ username });
+    if (!usernameCheck)
+      return res.json({ msg: "Invalid username", status: false });
+    const emailCheck = await User.findOne({ email });
+    if (!emailCheck) return res.json({ msg: "Invalid email", status: false });
+    const passwordCheck = await bcrypt.compare(
+      password,
+      usernameCheck.password
+    );
+    if (!passwordCheck)
+      return res.json({ msg: "Invalid password", status: false });
+    const accessToken = jwt.sign(
+      {
+        username: usernameCheck.username,
+        email: usernameCheck.email,
+        usertype: usernameCheck.usertype,
+      },
+      process.env.JWT_SECRET_KEY
+    );
+    delete usernameCheck.password;
+    // console.log(usernameCheck)
+    return res.json({ status: true, user: usernameCheck, accessToken });
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
-* @swagger
-* /api/auth/newPassword:
-*   post:
-*    summary: Create a new password
-*    tags: [Authentication]
-*    requestBody:
-*       required: true
-*       content:
-*        application/json:
-*          schema:
-*           type: object
-*           properties:
-*             email:
-*               type: string
-*               description: The email of the user
-*             password:
-*               type: string
-*               description: The new password of the user
-*    responses:
-*      200:
-*       description: New password created successfully
-*       content:
-*        application/json:
-*          schema:
-*           type: object
-*           properties:
-*            status:
-*              type: boolean
-*              description: The status of the user login
-*            user:
-*              ref: '#/components/schemas/User'
-*              description: The user details        
-*/
-
+ * @swagger
+ * /api/auth/newPassword:
+ *   post:
+ *    summary: Create a new password
+ *    tags: [Authentication]
+ *    requestBody:
+ *       required: true
+ *       content:
+ *        application/json:
+ *          schema:
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *               description: The email of the user
+ *             password:
+ *               type: string
+ *               description: The new password of the user
+ *    responses:
+ *      200:
+ *       description: New password created successfully
+ *       content:
+ *        application/json:
+ *          schema:
+ *           type: object
+ *           properties:
+ *            status:
+ *              type: boolean
+ *              description: The status of the user login
+ *            user:
+ *              ref: '#/components/schemas/User'
+ *              description: The user details
+ */
 
 module.exports.newPassword = async (req, res, next) => {
-    try{
-        const { email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 12);
-        const user = await User.findOneAndUpdate({ email: email } , {password: hashedPassword, confirmPassword: hashedPassword });
-        return res.json({status: true, user: user});
-    }
-    catch(err){
-        next(err)
-    }
-}
-
+  try {
+    const { email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = await User.findOneAndUpdate(
+      { email: email },
+      { password: hashedPassword, confirmPassword: hashedPassword }
+    );
+    return res.json({ status: true, user: user });
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
  * @swagger
@@ -254,7 +276,6 @@ module.exports.newPassword = async (req, res, next) => {
  *   name: Admin Authentication
  *   description: The admin authentication managing API
  */
-
 
 /**
  * @swagger
@@ -279,7 +300,7 @@ module.exports.newPassword = async (req, res, next) => {
  *      application/json:
  *       schema:
  *         type: object
- *         properties:  
+ *         properties:
  *          status:
  *           type: boolean
  *           description: The status of the admin login
@@ -288,19 +309,16 @@ module.exports.newPassword = async (req, res, next) => {
  *           description: The message of the admin login status
  */
 
-
 module.exports.adminLogin = async (req, res, next) => {
-    try{
-        const { password } = req.body;
-        const adminCheck = await Admin.findOne({ password })
-        if(!adminCheck){
-            return res.json({msg :"Incorrect Admin Password",status: false})
-
-        }else{
-            return res.json({status: true})
-        }
+  try {
+    const { password } = req.body;
+    const adminCheck = await Admin.findOne({ password });
+    if (!adminCheck) {
+      return res.json({ msg: "Incorrect Admin Password", status: false });
+    } else {
+      return res.json({ status: true });
     }
-    catch(err){
-        next(err)
-    }
-}
+  } catch (err) {
+    next(err);
+  }
+};
