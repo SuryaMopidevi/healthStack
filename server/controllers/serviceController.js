@@ -1,9 +1,10 @@
 const Query = require("../models/queryModel");
-const Transaction = require("../models/transactionModel");
 const Prescription = require("../models/prescriptionModel");
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
 const Review = require("../models/reviewModel");
+const Payment = require("../models/paymentModel");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 /**
  * @swagger
@@ -153,56 +154,6 @@ module.exports.allQueries = async (req, res, next) => {
  *  description: The transaction managing API
  */
 
-/**
- * @swagger
- * /api/services/transaction:
- *  post:
- *   summary: Create a new transaction
- *   security:
- *     - bearerAuth: []
- *   tags: [Transaction]
- *   requestBody:
- *    required: true
- *    content:
- *     application/json:
- *      schema:
- *       ref: '#/components/schemas/Transaction'
- *   responses:
- *    200:
- *     description: The transaction was successful
- *     content:
- *      application/json:
- *       schema:
- *         status:
- *          type: boolean
- */
-
-module.exports.transaction = async (req, res, next) => {
-  try {
-    const {
-      accountholder,
-      phone,
-      accountnumber,
-      ifsc,
-      amount,
-      pincode,
-      address,
-    } = req.body;
-    const transaction = new Transaction({
-      accountholder,
-      phone,
-      accountnumber,
-      ifsc,
-      amount,
-      pincode,
-      address,
-    });
-    await transaction.save();
-    return res.json({ status: true });
-  } catch (err) {
-    next(err);
-  }
-};
 
 /**
  * @swagger
@@ -221,7 +172,7 @@ module.exports.transaction = async (req, res, next) => {
 
 module.exports.allTransactions = async (req, res, next) => {
   try {
-    const transactions = await Transaction.find({});
+    const transactions = await Payment.find({});
     const transactionArray = [];
     for (let i = 0; i < transactions.length; i++) {
       transactionArray.push({ ...transactions[i], id: i + 1 });
@@ -265,6 +216,26 @@ module.exports.allComments = async (req, res, next) => {
     const reviews = await Review.find({}).populate("user").populate("product");
     // console.log(reviews);
     return res.json(reviews);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.paymentFunction = async (req, res, next) => {
+  try {
+    const { username, amount } = req.body;
+
+    const payment = new Payment({ accountholder: username, amount });
+    await payment.save();
+
+    stripe.charges.create(req.body, (stripeErr, stripeRes) => {
+      if (stripeErr) {
+        res.status(500).send({ error: stripeErr });
+      } else {
+        console.log(stripeRes);
+        res.status(200).send({ success: stripeRes });
+      }
+    });
   } catch (err) {
     next(err);
   }

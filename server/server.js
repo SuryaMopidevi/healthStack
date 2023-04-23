@@ -6,6 +6,9 @@ const swaggerUI = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
 const helmet = require('helmet')
 const redis = require('redis')
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const bodyParser = require('body-parser')
+const path = require('path')
 require('dotenv').config()
 
 // routers
@@ -45,6 +48,8 @@ const options = {
     apis: ["./controllers/*.js"]
 }
 
+if(process.env.NODE_ENV !== 'production') require('dotenv').config();
+
 const specs = swaggerJsDoc(options)
 
 const app = express()
@@ -55,6 +60,12 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs))
 app.use(helmet())
 app.use(cors())
 app.use(express.json())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}))
+
+if (process.env.NODE_ENV === 'production'){
+    app.use(express.static(path.join(__dirname,'client/build')));
+}
 
 // setup the logger
 app.use(morgan("tiny", { stream: accessLogStream }));
