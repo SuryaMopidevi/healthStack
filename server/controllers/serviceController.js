@@ -4,7 +4,7 @@ const User = require("../models/userModel");
 const Product = require("../models/productModel");
 const Review = require("../models/reviewModel");
 const Payment = require("../models/paymentModel");
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 /**
  * @swagger
@@ -154,7 +154,6 @@ module.exports.allQueries = async (req, res, next) => {
  *  description: The transaction managing API
  */
 
-
 /**
  * @swagger
  * /api/services/alltransactions:
@@ -236,6 +235,31 @@ module.exports.paymentFunction = async (req, res, next) => {
         res.status(200).send({ success: stripeRes });
       }
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.prescriptioncheck = async (req, res, next) => {
+  try {
+    const pc = await Prescription.find({})
+      .populate({
+        path: "user",
+        model: User,
+        select: "firstname",
+      })
+      .populate({
+        path: "product",
+        model: Product,
+        select: "productname",
+      });
+    // console.log("mdmmd", pc);
+    const pcArray = [];
+    for (let i = 0; i < pc.length; i++) {
+      pcArray.push({ ...pc[i], id: i + 1 });
+    }
+    // console.log(pcArray);
+    return res.json(pcArray);
   } catch (err) {
     next(err);
   }

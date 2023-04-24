@@ -7,3 +7,4 @@ export const allUsersRoute = `${hostURL}/api/users`;
 export const userRoute = `${hostURL}/api/users`;
 export const queryRoute = `${hostURL}/api/services/allqueries`;
 export const TransactionRoute = `${hostURL}/api/services/alltransactions`;
+export const prescriptionRoute =`${hostURL}/api/services/prescriptioncheck`;

@@ -12,6 +12,7 @@ import Adminlogin from "./pages/Adminlogin/Adminlogin";
 import Error from "./pages/Error";
 import Transaction from "./pages/Transactions/Transaction";
 import Queries from "./pages/Queries/Queries";
+import PrescriptionList from "./pages/prescriptionCheck/PrescriptionCheck";
 
 function App() {
   return (
@@ -46,6 +47,10 @@ function App() {
         </Route>
         <Route path="/newproduct">
           <NewProduct />
+        </Route>
+        <Route path="/prescriptioncheck">
+          <PrescriptionList />
+          <Error />
         </Route>
         <Route path="/error">
           <Error />

@@ -65,15 +65,7 @@ const Cart = () => {
               </SummaryItemPrice>
             </SummaryItem>
             <span style={{ marginLeft: "32%" }}>
-              <StripeCheckoutButton
-                total={
-                  total -
-                  0.1 * total +
-                  totalCount +
-                  parseInt(`${totalCount > 0 ? deliver : 0}`)
-                }
-                totalCount={totalCount}
-              />
+              <StripeCheckoutButton total={total} totalCount={totalCount} />
             </span>
           </Summary>
         </Bottom>

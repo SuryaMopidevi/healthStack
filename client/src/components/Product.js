@@ -8,7 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
+
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import { USER_KEY } from "../utils/secretkeys";
+// import { textColorsPropType } from "@coreui/react/dist/components/Types";
 
 const Product = ({ item }) => {
   const navigate = useNavigate();
@@ -64,37 +67,55 @@ const Product = ({ item }) => {
   const searchHandler = async () => {
     navigate(`/products/${item._id}`);
   };
-
+  console.log(item);
   return (
     <>
       <Container>
-        <Circle />
-        <Image src={item.img} />
-        <Info>
-          <Icon onClick={cartHandler}>
-            <ShoppingCartOutlinedIcon />
-          </Icon>
-          <Icon>
-            <SearchOutlinedIcon onClick={searchHandler} />
-          </Icon>
-          <Icon>
-            <FavoriteBorderOutlinedIcon />
-          </Icon>
-        </Info>
-        <ToastContainer />
+        {/* <Circle /> */}
+
+        <div>
+          <Info style={{ display: "flex", flexDirection: "column" }}>
+            <h7 style={{ color: "black", paddingTop: 300 }}>
+              {item.productname}
+            </h7>
+            <h7>Rs.{item.price}</h7>
+            {/* <h7 style={{ color: "black" ,paddingTop:0 }}>Rs.{item.price}</h7> */}
+
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <Icon style={{ color: "#219ebc" }} onClick={cartHandler}>
+                <ShoppingCartOutlinedIcon />
+              </Icon>
+              <Icon>
+                {/* <InfoRoundedIcon style={{backgroundColor:"#219ebc"}} onClick={searchHandler}></InfoRoundedIcon> */}
+                {/* <InfoIcon style={{backgroundColor:"#219ebc"}} onClick={searchHandler}></InfoIcon> */}
+                <SearchOutlinedIcon onClick={searchHandler} />
+              </Icon>
+              <Icon>
+                <FavoriteBorderOutlinedIcon style={{ color: "red" }} />
+              </Icon>
+            </div>
+          </Info>
+
+          <Image
+            style={{ alignContent: "top", height: 250, marginBottom: 80 }}
+            src={item.img}
+          />
+        </div>
       </Container>
+
+      <ToastContainer />
     </>
   );
 };
 
 const Info = styled.div`
-  opacity: 0;
+  opacity: 1;
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0);
   z-index: 3;
   display: flex;
   align-items: center;
@@ -107,16 +128,16 @@ const Container = styled.div`
   flex: 1;
   margin: 5px;
   min-width: 280px;
-  height: 350px;
+  height: 450px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #f5fbfd;
   position: relative;
 
-  &:hover ${Info} {
-    opacity: 1;
-  }
+  // &:hover ${Info} {
+  //   opacity: 0;
+  // }
 `;
 
 const Circle = styled.div`
@@ -128,7 +149,7 @@ const Circle = styled.div`
 `;
 
 const Image = styled.img`
-  height: 75%;
+  height: 60%;
   z-index: 2;
 `;
 
@@ -147,5 +168,7 @@ const Icon = styled.div`
     transform: scale(1.1);
   }
 `;
+
+const Div = styled.div``;
 
 export default Product;

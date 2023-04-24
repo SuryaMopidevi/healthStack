@@ -7,7 +7,12 @@ import { stripeKey } from "../../utils/secretkeys";
 const StripeCheckoutButton = ({ total, totalCount }) => {
   const deliver = 40;
   const USER_KEY = "current user";
-  const [priceForStripe, setPriceForStripe] = useState(total);
+  const [priceForStripe, setPriceForStripe] = useState(
+    total -
+      0.1 * total +
+      totalCount +
+      parseInt(`${totalCount > 0 ? deliver : 0}`)
+  );
   const [user, setUser] = useState(JSON.parse(localStorage.getItem(USER_KEY)));
 
   const onToken = () => {

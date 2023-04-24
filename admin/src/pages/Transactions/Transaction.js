@@ -14,7 +14,7 @@ export default function Transaction() {
 
   useEffect(() => {
     axios
-    .get(TransactionRoute)
+      .get(TransactionRoute)
       // .get(`${hostURL}/orders`)
       .then((res) => {
         setData(res.data);
@@ -25,47 +25,23 @@ export default function Transaction() {
   }, []);
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 150 },
     {
       field: "accountholder",
       headerName: "Account Holder",
-      width: 200,
+      width: 400,
       renderCell: (params) => {
         return (
           <div className="productListItem">{params.row._doc.accountholder}</div>
         );
       },
     },
-    { field: "phone", headerName: "Phone Number", width: 200,
-    renderCell: (params) => {
-      return (
-        <div className="productListItem">{params.row._doc.phone}</div>
-      );
-    }, 
-  
-  },
-    { field: "accountnumber", headerName: "Account Number", width: 200,
-    renderCell: (params) => {
-      return (
-        <div className="productListItem">{params.row._doc.accountnumber}</div>
-      );
-    },
-  },
-    { field: "ifsc", headerName: "IFSC Code", width: 150,
-    renderCell: (params) => {
-      return (
-        <div className="productListItem">{params.row._doc.ifsc}</div>
-      );
-    },
-  },
     {
       field: "amount",
       headerName: "Amount",
-      width: 150,
+      width: 400,
       renderCell: (params) => {
-        return (
-          <div className="productListItem">{params.row._doc.amount}</div>
-        );
+        return <div className="productListItem">{params.row._doc.amount}</div>;
       },
     },
   ];

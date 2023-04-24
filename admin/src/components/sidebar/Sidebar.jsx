@@ -15,7 +15,7 @@ import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
+import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 
 export default function Sidebar() {
   return (
@@ -67,6 +67,12 @@ export default function Sidebar() {
               <li className="sidebarListItem">
                 <LocalHospitalOutlinedIcon />
                 Add Product
+              </li>
+            </Link>
+            <Link to="/prescriptioncheck" className="link">
+              <li className="sidebarListItem">
+                <QuestionAnswerOutlinedIcon />
+                Prescriptions
               </li>
             </Link>
             <Link to="/" className="link">
