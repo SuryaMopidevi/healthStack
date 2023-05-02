@@ -1,5 +1,9 @@
 <h2>HealthStack</h2>
 
+Libraries and Frameworks: React.js,  Node.js, Express.js
+Databases: MongoDB, Redis, Firebase
+
+<hr>
 
 <p>Make sure to install node</p>
 <p>Install dependencies</p>
@@ -25,7 +29,6 @@
   <li>npm install</li>
   <li>nodemon server</li>
 </ul>
-
 
 
 <p>Youtube Link - https://youtu.be/dCUg-RWjzAc </p>
