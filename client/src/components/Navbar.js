@@ -14,7 +14,7 @@ import {
 import { USER_KEY, PROFILE_PHOTO_KEY } from "../utils/secretkeys";
 
 const Navbar = () => {
-  const [user] = useState(JSON.parse(localStorage.getItem(USER_KEY)));
+  const [user] = useState(JSON.parse(localStorage.getItem(process.env.REACT_APP_USER_KEY)));
   const { cart, totalCount } = useContext(ThemeContext);
 
   return (
@@ -133,6 +133,7 @@ const Navbar = () => {
                   to="/"
                   onClick={() => {
                     localStorage.clear();
+                    window.location.reload();
                   }}
                 >
                   <CDropdownItem>

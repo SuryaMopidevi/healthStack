@@ -60,7 +60,7 @@ const AddProduct = () => {
           type: addProduct.type,
         }, {
           headers: {
-            authorization: "Bearer " + JSON.parse(localStorage.getItem(USER_KEY)).accessToken 
+            authorization: "Bearer " + JSON.parse(localStorage.getItem(process.env.REACT_APP_USER_KEY)).accessToken 
           }
         })
         .then((res) => {

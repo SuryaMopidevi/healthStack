@@ -13,7 +13,7 @@ const StripeCheckoutButton = ({ total, totalCount }) => {
       totalCount +
       parseInt(`${totalCount > 0 ? deliver : 0}`)
   );
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem(USER_KEY)));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem(process.env.REACT_APP_USER_KEY)));
 
   const onToken = () => {
     if (!user) {
@@ -30,12 +30,7 @@ const StripeCheckoutButton = ({ total, totalCount }) => {
         alert("payment successful");
         return;
       });
-    // .catch(error => {
-    //     alert(
-    //         'There was an issue with your payment'
-    //     );
-    //     return;
-    // });
+      window.location.reload();
   };
 
   return (
@@ -45,7 +40,7 @@ const StripeCheckoutButton = ({ total, totalCount }) => {
       billingAddress
       shippingAddress
       image="https://thumbs.dreamstime.com/z/cross-plus-medical-logo-icon-design-template-elements-cross-plus-medical-logo-icon-100597830.jpg"
-      description={`Your total is ${priceForStripe}`}
+      description={total-0.1 * total+totalCount +parseInt(`${totalCount > 0 ? deliver : 0}`)}
       panelLabel="Pay Now"
       token={onToken}
       stripeKey={stripeKey}

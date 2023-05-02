@@ -29,6 +29,7 @@ const userSchema = new schema({
   usertype: {
     type: String,
     required: true,
+    index: true
   },
   profilePic: {
     type: String,

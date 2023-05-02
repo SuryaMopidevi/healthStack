@@ -1,12 +1,30 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const client = require("../utils/RedisServer");
+const redis = require('redis');
+
+const client = redis.createClient({
+    password: process.env.REDIS_PASSWORD,
+    socket: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT
+    }
+});
+
+client.connect()
+.then(() => {
+    console.log('Redis connected')
+})
+.catch((err) => {
+    console.log(err.message)
+})
+
+module.exports = client;
 
 module.exports.cacheUserLogin = async (req, res, next) => {
   const { username, email, password, usertype } = req.body;
   const data = await client.get(username);
   if (data !== null) {
-    // console.log("cache")
+    console.log("cache")
     if (email !== JSON.parse(data).email) {
       return res.json({ msg: "Invalid email", status: false });
     }
@@ -29,7 +47,7 @@ module.exports.cacheUserLogin = async (req, res, next) => {
     delete data.password;
     return res.json({ status: true, user: JSON.parse(data), accessToken });
   } else {
-    // console.log("no cache")
+    console.log("no cache")
     next();
   }
 };

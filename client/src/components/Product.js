@@ -23,7 +23,7 @@ const Product = ({ item }) => {
       alert("Please upload the Doctor Prescription");
       return;
     }
-    if (!localStorage.getItem(USER_KEY)) {
+    if (!localStorage.getItem(process.env.REACT_APP_USER_KEY)) {
       navigate("/register");
     } else {
       let flag = true;

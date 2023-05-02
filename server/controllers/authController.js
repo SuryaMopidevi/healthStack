@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const Admin = require("../models/adminLoginModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const client = require("../utils/RedisServer");
+const client = require("../middlewares/cacheMiddleware");
 
 /**
  * @swagger
@@ -141,6 +141,7 @@ module.exports.register = async (req, res, next) => {
       })
     );
 
+    console.log("register")
     return res.json({ status: true, user });
   } catch (err) {
     next(err);

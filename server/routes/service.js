@@ -6,7 +6,9 @@ const {
   addComment,
   allComments,
   paymentFunction,
-  prescriptioncheck
+  prescriptioncheck,
+  prescriptionStatus,
+  prescriptionStatusCheck
 } = require("../controllers/serviceController");
 const { verifyToken } = require("../middlewares/verifyToken");
 
@@ -20,5 +22,7 @@ router.post("/prescription", verifyToken, prescriptionUpload);
 router.post("/addcomment", addComment);
 router.post('/payment', paymentFunction)
 router.get("/prescriptioncheck",prescriptioncheck)
+router.post("/prescriptionstatus", prescriptionStatus)
+router.post('/prescriptionstatuscheck', prescriptionStatusCheck)
 
 module.exports = router;

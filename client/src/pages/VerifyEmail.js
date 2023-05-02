@@ -17,10 +17,10 @@ const VerifyEmail = () => {
     if(otp !== 0)
     {
         emailjs.sendForm(
-            "service_fuf202i",
-            "template_r4pbalp",
+            process.env.REACT_APP_USER_EMAIJS_SERVICE,
+            process.env.REACT_APP_USER_EMAIJS_TEMPLATE,
             form.current,
-            "9jjEZ4Q1b7CYAn7Uu",
+            process.env.REACT_APP_USER_EMAIJS_USERID,
         )
         .then(() => {
             console.log("success");
@@ -51,6 +51,7 @@ const submitHandler = async (e) => {
     e.preventDefault();
     if(otpRef.current.value === otp)
     {
+      console.log(location.state)
       if (location.state.usertype === "Seller") {
         const res = await axios.post(registerRoute , {
           firstname: location.state.firstname,

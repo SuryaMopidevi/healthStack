@@ -2,10 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "mocha",
-    "start": "nodemon server.js"
+  "main": "index.js",
+  "scripts": {  
+    "test": "mocha 'Test/*.js' --testTimeout 10000 --exit",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",

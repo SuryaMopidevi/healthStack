@@ -12,6 +12,10 @@ const prescriptionSchema = new mongoose.Schema({
    prescription: {
     type: String,
     required: true
+   },
+   status: {
+      type: Boolean,
+      default: false
    }
 })
 

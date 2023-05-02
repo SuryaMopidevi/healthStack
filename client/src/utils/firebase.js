@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAFpm-jzFMKUvhyPkEY6ZYuFOtgtoV5_hg",
-  authDomain: "profile-picture-healthstack.firebaseapp.com",
-  projectId: "profile-picture-healthstack",
-  storageBucket: "profile-picture-healthstack.appspot.com",
-  messagingSenderId: "206903879563",
-  appId: "1:206903879563:web:c8a1f39043b7a0038eb18e",
-  measurementId: "G-Q9T0BGE1YK"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACCT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);

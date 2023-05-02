@@ -14,14 +14,14 @@ import { USER_KEY, PROFILE_PHOTO_KEY } from "../utils/secretkeys";
 
 const Profile = () => {
   const [profile, setProfile] = useState(
-    JSON.parse(localStorage.getItem(USER_KEY))
+    JSON.parse(localStorage.getItem(process.env.REACT_APP_USER_KEY))
   );
-  const [actualName, setActualName] = useState(JSON.parse(localStorage.getItem(USER_KEY)).username);
-  const [actualEmail, setActualEmail] = useState(JSON.parse(localStorage.getItem(USER_KEY)).email);
+  const [actualName, setActualName] = useState(JSON.parse(localStorage.getItem(process.env.REACT_APP_USER_KEY)).username);
+  const [actualEmail, setActualEmail] = useState(JSON.parse(localStorage.getItem(process.env.REACT_APP_USER_KEY)).email);
   const [image, setImage] = useState(null);
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [url, setUrl] = useState(localStorage.getItem(PROFILE_PHOTO_KEY) && JSON.parse(localStorage.getItem(PROFILE_PHOTO_KEY)).url);
+  const [url, setUrl] = useState(localStorage.getItem(process.env.REACT_APP_PROFILE_PHOTO_KEY) && JSON.parse(localStorage.getItem(process.env.REACT_APP_PROFILE_PHOTO_KEY)).url);
   const navigate = useNavigate();
 
   
@@ -51,7 +51,7 @@ const Profile = () => {
       })
       .then((res) => {
         if(res.data.status) {
-          localStorage.setItem(USER_KEY, JSON.stringify(profile));
+          localStorage.setItem(process.env.REACT_USER_KEY, JSON.stringify(profile));
           alert(res.data.msg);
           window.location.reload();
           return;
@@ -83,7 +83,7 @@ const Profile = () => {
       getDownloadURL(imageRef)
       .then((url)=>{
           setUrl(url)
-          localStorage.setItem(PROFILE_PHOTO_KEY, JSON.stringify({url: url}));
+          localStorage.setItem(process.env.PROFILE_PHOTO_KEY, JSON.stringify({url: url}));
         })
        .catch((error)=>{ 
           console.log(error)

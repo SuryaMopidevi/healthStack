@@ -188,8 +188,24 @@ module.exports.prescriptionUpload = async (req, res, next) => {
     const { url, username, productname } = req.body;
     const user = await User.findOne({ username });
     const product = await Product.findOne({ productname });
-    const prescription = new Prescription({ user, product, prescription: url });
-    await prescription.save();
+    const prescriptionCheck = await Prescription.findOne({
+      user: user._id,
+      product: product._id,
+    });
+    if (prescriptionCheck) {
+      const prescription = await Prescription.findOneAndUpdate(
+        { user: user._id, product: product._id },
+        { prescription: url }
+      );
+      return;
+    } else {
+      const prescription = new Prescription({
+        user,
+        product,
+        prescription: url,
+      });
+      await prescription.save();
+    }
   } catch (err) {
     next(err);
   }
@@ -213,7 +229,7 @@ module.exports.addComment = async (req, res, next) => {
 module.exports.allComments = async (req, res, next) => {
   try {
     const reviews = await Review.find({}).populate("user").populate("product");
-    // console.log(reviews);
+    console.log(reviews);
     return res.json(reviews);
   } catch (err) {
     next(err);
@@ -246,7 +262,7 @@ module.exports.prescriptioncheck = async (req, res, next) => {
       .populate({
         path: "user",
         model: User,
-        select: "firstname",
+        select: "username",
       })
       .populate({
         path: "product",
@@ -260,6 +276,33 @@ module.exports.prescriptioncheck = async (req, res, next) => {
     }
     // console.log(pcArray);
     return res.json(pcArray);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.prescriptionStatus = async (req, res, next) => {
+  try {
+    const { status, userId, productId } = req.body;
+    const prescription = await Prescription.findOneAndUpdate(
+      { user: userId, product: productId },
+      { status: status }
+    );
+    return res.json({ prescription });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.prescriptionStatusCheck = async (req, res, next) => {
+  try {
+    const { user, productId } = req.body;
+    const u = await User.findOne({ username: user.username });
+    const prescription = await Prescription.findOne({
+      user: u._id,
+      product: productId,
+    });
+    return res.json({ prescription });
   } catch (err) {
     next(err);
   }

@@ -106,7 +106,7 @@ const Register = () => {
       //   })
         
       //   if(res.data.status){
-      //     localStorage.setItem(USER_KEY, JSON.stringify({username:user.username, email:user.email, password: user.password}));
+      //     localStorage.setItem(process.env.REACT_APP_USER_KEY, JSON.stringify({username:user.username, email:user.email, password: user.password}));
       //     setUser({
       //       firstname: "",
       //       lastname: "",
