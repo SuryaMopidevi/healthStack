@@ -1,6 +1,7 @@
 <h2>HealthStack</h2>
 
 Libraries and Frameworks: React.js,  Node.js, Express.js
+<br>
 Databases: MongoDB, Redis, Firebase
 
 <hr>
