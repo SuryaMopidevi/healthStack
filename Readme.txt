@@ -23,6 +23,3 @@ nodemon server
 Youtube Link - https://youtu.be/dCUg-RWjzAc
 
 Deployed Link - https://healthstack-client.vercel.app/
-
-link application with mongoDB atlas using following URL
-mongodb+srv://sainithin:gubba12345@healthstackdb.eunhy5z.mongodb.net/?retryWrites=true&w=majority
