@@ -1,13 +1,13 @@
 <h2>HealthStack</h2>
 
 <p>
- Healthstack is an e-commerce platform involves 2 users(Seller and Consumer). It offers 3 services( Medicines, Healthcare Products and Pharmaceutical Products ).
+ Healthstack is an e-commerce platform involves 2 users( Seller and Consumer ). It offers 3 services( Medicines, Healthcare Products and Pharmaceutical Products ).
  Prescription verification done for prescribe drugs and Stripe used as payment gateway. User authentication using JWT tokens and OTP verfication.
 </p>
 
-Libraries and Frameworks: React.js,  Node.js, Express.js
+<b>Libraries and Frameworks:</b> React.js,  Node.js, Express.js
 <br>
-Databases: MongoDB, Redis, Firebase
+<b>Databases:</b> MongoDB, Redis, Firebase
 
 <hr>
 
